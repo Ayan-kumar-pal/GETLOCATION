@@ -10,20 +10,23 @@ function Getloc() {
   const [containerHeight, setContainerHeight] = useState(100);
 
   const handleClick = async () => {
-    const res = await fetch(
-      `http://api.geonames.org/postalCodeLookupJSON?postalcode=${zipCode}&username=ayan007`
-    );
-    const data = await res.json();
-
-    setContainerHeight(400); // Increase container height
-
-    if (data.postalcodes.length === 0) {
-      setLocationInfo(null);
-      setShowNoData(true);
-      return;
-    } else {
-      setLocationInfo(data.postalcodes[0]);
-      setShowNoData(false);
+    try {
+      const res = await fetch(
+        `http://api.geonames.org/postalCodeLookupJSON?postalcode=${zipCode}&username=ayan007`
+      );
+      const data = await res.json();
+  
+      setContainerHeight(400); // Increase container height
+  
+      if (data.postalcodes.length === 0) {
+        setLocationInfo(null);
+        setShowNoData(true);
+      } else {
+        setLocationInfo(data.postalcodes[0]);
+        setShowNoData(false);
+      }
+    } catch (error) {
+      console.error("Error in handleClick:", error);
     }
   };
 
@@ -50,9 +53,10 @@ function Getloc() {
           <span className="closeIcon" onClick={handleReset}>
             <img className='icon_cross' src={cross_Icon} alt="Cross Icon" />
           </span>
+          
         )}
-        <button className="bx bx-search" onClick={handleClick}></button>
-
+        
+       {zipCode &&( <button className="bx bx-search" onClick={handleClick}></button>)}
         {locationInfo && (
           <div className="info">
             <h3>Location Info</h3>
