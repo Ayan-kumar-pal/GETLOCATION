@@ -8,7 +8,7 @@ function Getloc() {
   const [zipCode, setZipCode] = useState("");
   const [showNoData, setShowNoData] = useState(false);
   const [containerHeight, setContainerHeight] = useState(100);
-
+  const api=3485f280-7bf3-11ee-aecd-570962425fb9;
   const handleClick = async () => {
     try {
       const res = await fetch(
@@ -56,7 +56,7 @@ function Getloc() {
           
         )}
         
-       {zipCode &&( <button className="bx bx-search" onClick={handleClick}></button>)}
+       <button className="bx bx-search" onClick={handleClick}></button>
         {locationInfo && (
           <div className="info">
             <h3>Location Info</h3>
