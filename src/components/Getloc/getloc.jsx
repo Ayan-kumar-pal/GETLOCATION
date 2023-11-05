@@ -8,21 +8,21 @@ function Getloc() {
   const [zipCode, setZipCode] = useState("");
   const [showNoData, setShowNoData] = useState(false);
   const [containerHeight, setContainerHeight] = useState(100);
-  const api=3485f280-7bf3-11ee-aecd-570962425fb9;
+  const api="3485f280-7bf3-11ee-aecd-570962425fb9";
+
   const handleClick = async () => {
     try {
       const res = await fetch(
-        `http://api.geonames.org/postalCodeLookupJSON?postalcode=${zipCode}&username=ayan007`
+        `https://app.zipcodebase.com/api/v1/search?apikey=${api}&codes=${zipCode}`
       );
-      const data = await res.json();
-  
+      const data = await res.json(); 
       setContainerHeight(400); // Increase container height
   
-      if (data.postalcodes.length === 0) {
+      if (data.results.length === 0) {
         setLocationInfo(null);
         setShowNoData(true);
       } else {
-        setLocationInfo(data.postalcodes[0]);
+        setLocationInfo(data.results[zipCode][0]);
         setShowNoData(false);
       }
     } catch (error) {
@@ -36,6 +36,11 @@ function Getloc() {
     setShowNoData(false);
     setContainerHeight(100); // Reset container height
   };
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setZipCode(value);
+    if (!value) handleReset();
+  };
 
   return (
     <div className="container" style={{ height: `${containerHeight}px` }}>
@@ -45,9 +50,7 @@ function Getloc() {
           type="text"
           value={zipCode}
           placeholder="Enter Your Pin Code"
-          onChange={(e) => {
-            setZipCode(e.target.value);
-          }}
+          onChange={handleInputChange}
         />
         {zipCode && (
           <span className="closeIcon" onClick={handleReset}>
@@ -56,16 +59,16 @@ function Getloc() {
           
         )}
         
-       <button className="bx bx-search" onClick={handleClick}></button>
+       {zipCode &&( <button className="bx bx-search" onClick={handleClick}></button>)}
         {locationInfo && (
           <div className="info">
             <h3>Location Info</h3>
-            <p>Pin Code: {locationInfo.postalcode}</p>
-            <p>Place Name: {locationInfo.placeName}</p>
-            <p>State: {locationInfo.adminName1}</p>
-            <p>Country: {locationInfo.countryCode}</p>
-            <p>Latitude: {locationInfo.lat}</p>
-            <p>Longitude: {locationInfo.lng}</p>
+            <p>Pin Code: {locationInfo.postal_code}</p>
+            <p>Place Name: {locationInfo.province}</p>
+            <p>State: {locationInfo.state}</p>
+            <p>Country: {locationInfo.country_code}</p>
+            <p>Latitude: {locationInfo.latitude}</p>
+            <p>Longitude: {locationInfo.longitude}</p>
           </div>
         )}
 
